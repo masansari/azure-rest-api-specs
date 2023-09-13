@@ -4585,6 +4585,178 @@
           }
         }
       }
+    },
+    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/fetchTieringCost": {
+      "post": {
+        "tags": [
+          "FetchTieringCost"
+        ],
+        "operationId": "FetchTieringCost_Post",
+        "description": "Provides the details of the tiering related sizes and cost.\r\nStatus of the operation can be fetched using GetTieringCostOperationStatus API and result using GetTieringCostOperationResult API.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/parameters/VaultName"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupName"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionId"
+          },
+          {
+            "name": "parameters",
+            "in": "body",
+            "description": "Fetch Tiering Cost Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/FetchTieringCostInfoRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TieringCostInfo"
+            }
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "$ref": "#/definitions/CloudError"
+            }
+          }
+        },
+        "x-ms-long-running-operation": true,
+        "x-ms-examples": {
+          "Get the tiering savings cost info for policy": {
+            "$ref": "./examples/TieringCost/FetchTieringCostForPolicy.json"
+          },
+          "Get the tiering savings cost info for protected item": {
+            "$ref": "./examples/TieringCost/FetchTieringCostForProtectedItem.json"
+          },
+          "Get the tiering savings cost info for vault": {
+            "$ref": "./examples/TieringCost/FetchTieringCostForVault.json"
+          },
+          "Get the rehyderation cost for recovery point": {
+            "$ref": "./examples/TieringCost/FetchTieringCostForRehydrate.json"
+          }
+        }
+      }
+    },
+    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationResults/{operationId}": {
+      "get": {
+        "tags": [
+          "GetTieringCostOpearationResult"
+        ],
+        "description": "Gets the result of async operation for tiering cost",
+        "operationId": "GetTieringCostOpearationResult_Get",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/parameters/VaultName"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupName"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionId"
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/TieringCostInfo"
+            }
+          },
+          "202": {
+            "description": "Accepted"
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "$ref": "#/definitions/CloudError"
+            }
+          }
+        },
+        "x-ms-examples": {
+          "Fetch Tiering Cost Operation Result": {
+            "$ref": "./examples/TieringCost/GetTieringCostOperationResult.json"
+          }
+        }
+      }
+    },
+    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationsStatus/{operationId}": {
+      "get": {
+        "tags": [
+          "TieringCostOpearationStatus"
+        ],
+        "operationId": "TieringCostOpearationStatus_Get",
+        "description": "Gets the status of async operations of tiering cost",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersion"
+          },
+          {
+            "$ref": "#/parameters/VaultName"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupName"
+          },
+          {
+            "$ref": "#/parameters/SubscriptionId"
+          },
+          {
+            "name": "operationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/OperationStatus"
+            }
+          },
+          "default": {
+            "description": "Error response describing why the operation failed.",
+            "schema": {
+              "$ref": "#/definitions/CloudError"
+            }
+          }
+        },
+        "x-ms-examples": {
+          "Fetch Tiering Cost Operation Status": {
+            "$ref": "./examples/TieringCost/GetTieringCostOperationStatus.json"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -9506,7 +9678,7 @@
       "type": "object",
       "properties": {
         "vaultRetention": {
-          "$ref": "#/definitions/RetentionPolicy",
+          "$ref": "#/definitions/RetentionPolicy"
         },
         "snapshotRetentionInDays": {
           "format": "int32",
@@ -12914,6 +13086,239 @@
           }
         }
       }
+    },
+    "TieringCostInfo": {
+      "description": "Base class for tiering cost response",
+      "required": [
+        "objectType"
+      ],
+      "type": "object",
+      "properties": {
+        "objectType": {
+          "description": "This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.",
+          "type": "string"
+        }
+      },
+      "discriminator": "objectType"
+    },
+    "FetchTieringCostInfoForRehydrationRequest": {
+      "description": "Request parameters for fetching cost info of rehydration",
+      "required": [
+        "objectType",
+        "containerName",
+        "protectedItemName",
+        "recoveryPointId",
+        "rehydrationPriority",
+        "sourceTierType",
+        "targetTierType"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/FetchTieringCostInfoRequest"
+        }
+      ],
+      "properties": {
+        "containerName": {
+          "description": "Name of the protected item container",
+          "type": "string"
+        },
+        "protectedItemName": {
+          "description": "Name of the protectedItemName",
+          "type": "string"
+        },
+        "recoveryPointId": {
+          "description": "ID of the backup copy for rehydration cost info needs to be fetched.",
+          "type": "string"
+        },
+        "rehydrationPriority": {
+          "description": "Rehydration Priority",
+          "enum": [
+            "Standard",
+            "High"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "RehydrationPriority",
+            "modelAsString": true
+          }
+        }
+      },
+      "x-ms-discriminator-value": "FetchTieringCostInfoForRehydrationRequest"
+    },
+    "FetchTieringCostInfoRequest": {
+      "description": "Base class for tiering cost request.\r\nSpecific cost request types are derived from this class.",
+      "required": [
+        "sourceTierType",
+        "targetTierType",
+        "objectType"
+      ],
+      "type": "object",
+      "properties": {
+        "sourceTierType": {
+          "description": "Source tier for the request",
+          "enum": [
+            "Invalid",
+            "InstantRP",
+            "HardenedRP",
+            "ArchivedRP"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "RecoveryPointTierType",
+            "modelAsString": false
+          }
+        },
+        "targetTierType": {
+          "description": "target tier for the request",
+          "enum": [
+            "Invalid",
+            "InstantRP",
+            "HardenedRP",
+            "ArchivedRP"
+          ],
+          "type": "string",
+          "x-ms-enum": {
+            "name": "RecoveryPointTierType",
+            "modelAsString": false
+          }
+        },
+        "objectType": {
+          "description": "This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.",
+          "type": "string"
+        }
+      },
+      "discriminator": "objectType"
+    },
+    "TieringCostRehydrationInfo": {
+      "description": "Response parameters for tiering cost info for rehydration",
+      "required": [
+        "objectType",
+        "rehydrationSizeInBytes",
+        "retailRehydrationCostPerGBPerMonth"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/TieringCostInfo"
+        }
+      ],
+      "properties": {
+        "rehydrationSizeInBytes": {
+          "format": "int64",
+          "description": "Rehydration size in bytes",
+          "type": "integer"
+        },
+        "retailRehydrationCostPerGBPerMonth": {
+          "format": "double",
+          "description": "Source tier to target tier rehydration cost per GB per month",
+          "type": "number"
+        }
+      },
+      "x-ms-discriminator-value": "TieringCostRehydrationInfo"
+    },
+    "TieringCostSavingInfo": {
+      "description": "Response parameters for tiering cost info for savings",
+      "required": [
+        "objectType",
+        "sourceTierSizeReductionInBytes",
+        "targetTierSizeIncreaseInBytes",
+        "retailSourceTierCostPerGBPerMonth",
+        "retailTargetTierCostPerGBPerMonth"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/TieringCostInfo"
+        }
+      ],
+      "properties": {
+        "sourceTierSizeReductionInBytes": {
+          "format": "int64",
+          "description": "Soruce tier size reduction in bytes after moving all the recommended backup points to target tier",
+          "type": "integer"
+        },
+        "targetTierSizeIncreaseInBytes": {
+          "format": "int64",
+          "description": "Target tier size increase in bytes after moving all the recommended backup points to target tier",
+          "type": "integer"
+        },
+        "retailSourceTierCostPerGBPerMonth": {
+          "format": "double",
+          "description": "Source tier retail cost per GB per month",
+          "type": "number"
+        },
+        "retailTargetTierCostPerGBPerMonth": {
+          "format": "double",
+          "description": "Target tier retail cost per GB per month",
+          "type": "number"
+        }
+      },
+      "x-ms-discriminator-value": "TieringCostSavingInfo"
+    },
+    "FetchTieringCostSavingsInfoForPolicyRequest": {
+      "description": "Request parameters for tiering cost info for policy",
+      "required": [
+        "objectType",
+        "policyName",
+        "sourceTierType",
+        "targetTierType"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/FetchTieringCostInfoRequest"
+        }
+      ],
+      "properties": {
+        "policyName": {
+          "description": "Name of the backup policy for which the cost savings information is requested",
+          "type": "string"
+        }
+      },
+      "x-ms-discriminator-value": "FetchTieringCostSavingsInfoForPolicyRequest"
+    },
+    "FetchTieringCostSavingsInfoForProtectedItemRequest": {
+      "description": "Request parameters for tiering cost info for protected item",
+      "required": [
+        "objectType",
+        "containerName",
+        "protectedItemName",
+        "sourceTierType",
+        "targetTierType"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/FetchTieringCostInfoRequest"
+        }
+      ],
+      "properties": {
+        "containerName": {
+          "description": "Name of the protected item container",
+          "type": "string"
+        },
+        "protectedItemName": {
+          "description": "Name of the protectedItemName",
+          "type": "string"
+        }
+      },
+      "x-ms-discriminator-value": "FetchTieringCostSavingsInfoForProtectedItemRequest"
+    },
+    "FetchTieringCostSavingsInfoForVaultRequest": {
+      "description": "Request parameters for tiering cost info for vault",
+      "required": [
+        "objectType",
+        "sourceTierType",
+        "targetTierType"
+      ],
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/FetchTieringCostInfoRequest"
+        }
+      ],
+      "x-ms-discriminator-value": "FetchTieringCostSavingsInfoForVaultRequest"
     }
   },
   "parameters": {
