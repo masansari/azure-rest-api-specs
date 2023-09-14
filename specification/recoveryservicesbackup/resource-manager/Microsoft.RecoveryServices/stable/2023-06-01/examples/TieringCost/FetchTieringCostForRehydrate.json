@@ -17,9 +17,9 @@
   "responses": {
     "200": {
       "body": {
-          "objectType": "TieringCostRehydrationInfo",
-          "rehydrationSizeInBytes": 1204000,
-          "retailRehydrationCostPerGBPerMonth": 0.02
+        "objectType": "TieringCostRehydrationInfo",
+        "rehydrationSizeInBytes": 1204000,
+        "retailRehydrationCostPerGBPerMonth": 0.02
       }
     },
     "202": {

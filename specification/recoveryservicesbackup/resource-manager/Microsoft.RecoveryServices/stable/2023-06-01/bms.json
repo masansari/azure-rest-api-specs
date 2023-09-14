@@ -4586,7 +4586,7 @@
         }
       }
     },
-    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/fetchTieringCost": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/fetchTieringCost": {
       "post": {
         "tags": [
           "FetchTieringCost"
@@ -4598,16 +4598,16 @@
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/ApiVersion"
-          },
-          {
-            "$ref": "#/parameters/VaultName"
+            "$ref": "#/parameters/SubscriptionId"
           },
           {
             "$ref": "#/parameters/ResourceGroupName"
           },
           {
-            "$ref": "#/parameters/SubscriptionId"
+            "$ref": "#/parameters/VaultName"
+          },
+          {
+            "$ref": "#/parameters/ApiVersion"
           },
           {
             "name": "parameters",
@@ -4647,40 +4647,40 @@
           "Get the tiering savings cost info for vault": {
             "$ref": "./examples/TieringCost/FetchTieringCostForVault.json"
           },
-          "Get the rehyderation cost for recovery point": {
+          "Get the rehydration cost for recovery point": {
             "$ref": "./examples/TieringCost/FetchTieringCostForRehydrate.json"
           }
         }
       }
     },
-    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationResults/{operationId}": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationResults/{operationId}": {
       "get": {
         "tags": [
-          "GetTieringCostOpearationResult"
+          "GetTieringCostOperationResult"
         ],
         "description": "Gets the result of async operation for tiering cost",
-        "operationId": "GetTieringCostOpearationResult_Get",
+        "operationId": "GetTieringCostOperationResult_Get",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/ApiVersion"
-          },
-          {
-            "$ref": "#/parameters/VaultName"
+            "$ref": "#/parameters/SubscriptionId"
           },
           {
             "$ref": "#/parameters/ResourceGroupName"
           },
           {
-            "$ref": "#/parameters/SubscriptionId"
+            "$ref": "#/parameters/VaultName"
           },
           {
             "name": "operationId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "$ref": "#/parameters/ApiVersion"
           }
         ],
         "responses": {
@@ -4707,34 +4707,34 @@
         }
       }
     },
-    "/Subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationsStatus/{operationId}": {
+    "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.RecoveryServices/vaults/{vaultName}/tieringCost/operationsStatus/{operationId}": {
       "get": {
         "tags": [
-          "TieringCostOpearationStatus"
+          "TieringCostOperationStatus"
         ],
-        "operationId": "TieringCostOpearationStatus_Get",
+        "operationId": "TieringCostOperationStatus_Get",
         "description": "Gets the status of async operations of tiering cost",
         "produces": [
           "application/json"
         ],
         "parameters": [
           {
-            "$ref": "#/parameters/ApiVersion"
-          },
-          {
-            "$ref": "#/parameters/VaultName"
+            "$ref": "#/parameters/SubscriptionId"
           },
           {
             "$ref": "#/parameters/ResourceGroupName"
           },
           {
-            "$ref": "#/parameters/SubscriptionId"
+            "$ref": "#/parameters/VaultName"
           },
           {
             "name": "operationId",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "$ref": "#/parameters/ApiVersion"
           }
         ],
         "responses": {
@@ -13235,7 +13235,7 @@
       "properties": {
         "sourceTierSizeReductionInBytes": {
           "format": "int64",
-          "description": "Soruce tier size reduction in bytes after moving all the recommended backup points to target tier",
+          "description": "Source tier size reduction in bytes after moving all the recommended backup points to target tier",
           "type": "integer"
         },
         "targetTierSizeIncreaseInBytes": {

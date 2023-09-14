@@ -9,11 +9,11 @@
   "responses": {
     "200": {
       "body": {
-          "objectType": "TieringCostSavingInfo",
-          "sourceTierSizeReductionInBytes": 1204000,
-          "targetTierSizeIncreaseInBytes": 1892,
-          "retailSourceTierCostPerGBPerMonth": 0.02,
-          "retailTargetTierCostPerGBPerMonth": 0.003
+        "objectType": "TieringCostSavingInfo",
+        "sourceTierSizeReductionInBytes": 1204000,
+        "targetTierSizeIncreaseInBytes": 1892,
+        "retailSourceTierCostPerGBPerMonth": 0.02,
+        "retailTargetTierCostPerGBPerMonth": 0.003
       }
     },
     "202": {
