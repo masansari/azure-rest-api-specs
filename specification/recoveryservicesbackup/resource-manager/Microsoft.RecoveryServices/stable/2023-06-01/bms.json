@@ -6469,13 +6469,28 @@
           "enum": [
             "Invalid",
             "FileRecovery",
-            "WorkloadRecovery"
+            "WorkloadRecovery",
+            "SnapshotAttach",
+            "RecoveryUsingSnapshot",
+            "SnapshotAttachAndRecover"
           ],
           "type": "string",
           "x-ms-enum": {
             "name": "RecoveryMode",
             "modelAsString": true
           }
+        },
+        "targetResourceGroupName": {
+          "description": "Defines the Resource group of the Target VM",
+          "type": "string"
+        },
+        "userAssignedManagedIdentityDetails": {
+          "$ref": "#/definitions/UserAssignedManagedIdentityDetails",
+          "description": "User Assigned managed identity details\r\nCurrently used for snapshot."
+        },
+        "snapshotRestoreParameters": {
+          "$ref": "#/definitions/SnapshotRestoreParameters",
+          "description": "Additional details for snapshot recovery\r\nCurrently used for snapshot for SAP Hana."
         },
         "targetVirtualMachineId": {
           "description": "This is the complete ARM Id of the target VM\r\nFor e.g. /subscriptions/{subId}/resourcegroups/{rg}/provider/Microsoft.Compute/virtualmachines/{vm}",
@@ -9499,6 +9514,37 @@
           "additionalProperties": {
             "$ref": "#/definitions/TieringPolicy"
           }
+        },
+	"snapshotBackupAdditionalDetails": {
+          "$ref": "#/definitions/SnapshotBackupAdditionalDetails"
+        }
+      }
+    },
+    "SnapshotBackupAdditionalDetails": {
+      "description": "Snapshot Backup related fields for WorkloadType SaPHanaSystem",
+      "type": "object",
+      "properties": {
+        "instantRpRetentionRangeInDays": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "instantRPDetails": {
+          "type": "string"
+        },
+        "userAssignedManagedIdentityDetails": {
+          "$ref": "#/definitions/UserAssignedManagedIdentityDetails"
+        }
+      }
+    },
+    "SnapshotRestoreParameters": {
+      "description": "Encapsulates information regarding snapshot recovery for SAP Hana",
+      "type": "object",
+      "properties": {
+        "skipAttachAndMount": {
+          "type": "boolean"
+        },
+        "logPointInTimeForDBRecovery": {
+          "type": "string"
         }
       }
     },
@@ -9602,6 +9648,31 @@
         "targetDirectoryForFileRestore": {
           "description": "Target directory location for restore as files.",
           "type": "string"
+        }
+      }
+    },
+    "UserAssignedIdentityProperties": {
+      "type": "object",
+      "properties": {
+        "clientId": {
+          "type": "string"
+        },
+        "principalId": {
+          "type": "string"
+        }
+      }
+    },
+    "UserAssignedManagedIdentityDetails": {
+      "type": "object",
+      "properties": {
+        "identityArmId": {
+          "type": "string"
+        },
+        "identityName": {
+          "type": "string"
+        },
+        "userAssignedIdentityProperties": {
+          "$ref": "#/definitions/UserAssignedIdentityProperties"
         }
       }
     },
